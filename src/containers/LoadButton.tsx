@@ -1,15 +1,13 @@
-import React from 'react'
 import { connect } from 'react-redux'
 import { todosRequested } from '../actions'
+import { Dispatch } from 'redux';
+import LoadButton from '../components/LoadButton';
 
-const LoadButton = ({ dispatch }: {dispatch: (action: any) => void}) => {
-  return (
-    <div>
-        <button type="submit" onClick={() => dispatch(todosRequested())}>
-            Load Todos
-        </button>
-    </div>
-  )
-}
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+    onClick: () => dispatch(todosRequested())
+})
 
-export default connect()(LoadButton)
+export default connect(
+    null, 
+    mapDispatchToProps
+)(LoadButton)
