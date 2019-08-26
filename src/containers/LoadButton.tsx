@@ -3,18 +3,11 @@ import { connect } from 'react-redux'
 import { todosRequested } from '../actions'
 
 const LoadButton = ({ dispatch }: {dispatch: (action: any) => void}) => {
-  let input: HTMLInputElement | null
-
   return (
     <div>
-      <form onSubmit={e => {
-        e.preventDefault()
-        dispatch(todosRequested())
-      }}>
-        <button type="submit">
-          Load Todos
+        <button type="submit" onClick={() => dispatch(todosRequested())}>
+            Load Todos
         </button>
-      </form>
     </div>
   )
 }

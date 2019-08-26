@@ -2,7 +2,7 @@ import { fetch } from '@mitchell/typescript.service.fetch';
 import { ITodo } from '../interfaces/ITodo';
 
 export class TodoService {
-    private readonly serviceUrl: string = 'http://localhost:5050/'
+    private readonly serviceUrl: string = 'http://172.20.61.39:5050/'
     private readonly fetchWrapper: (url: string | Request, init?: RequestInit | undefined) => Promise<Response>;
     
     // Don - In the event fetch is not provided the default fetch implementation which we created is used.
@@ -23,15 +23,23 @@ export class TodoService {
             .then(response => response.data.todos as ITodo[])
     }
 
-    public async createTodo(todo: ITodo): Promise<number> {
+    public async createTodo(todo: ITodo): Promise<ITodo> {
+        let body = {
+            operationName: null,
+            variables: {},
+            query: 'mutation { createTodo(input: { userId: "' + todo.id + '", text: "' + todo.text + '" }) { id text done } }'
+        }
+        
         let requestInit: RequestInit = {
             headers: { 'Content-Type': 'application/json' },
-            body: 'mutation \{ createTodo(input: \{ userId: \"' + todo.id + '\", text: \"' + todo.text + '\" \}) \{ user \{ id \} text done \} \}',
+            body: JSON.stringify(body),
             method: 'POST'
         }
 
-        return this.fetchWrapper(this.serviceUrl + '/query', requestInit)
+        return this.fetchWrapper(this.serviceUrl + 'query', requestInit)
             .then(response => response.json())
-            .then(response => response.data.todos[0].id)
+            .then(response => {
+                return response.data.createTodo
+            })
     }
 }
