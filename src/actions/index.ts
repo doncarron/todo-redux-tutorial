@@ -1,27 +1,56 @@
-export interface ISetVisibilityFilterAction {
-  type: string,
-  filter: string
-}
+import { Action } from 'redux';
+import { ITodo } from '../interfaces/ITodo';
+
+const MODULE_PREFIX = 'TODO';
+
+export const ADD_TODO = `${MODULE_PREFIX}_ADD_TODO`;
+export const SET_VISIBILITY_FILTER = `${MODULE_PREFIX}_SET_VISIBILITY_FILTER`;
+export const TOGGLE_TODO = `${MODULE_PREFIX}_TOGGLE_TODO`;
+export const TODOS_REQUESTED = `${MODULE_PREFIX}_TODOS_REQUESTED`;
+export const TODOS_RECEIVED = `${MODULE_PREFIX}_TODOS_RECEIVED`;
 
 let nextTodoId = 0
-export const addTodo = (text: string) => ({
-  type: 'ADD_TODO',
-  id: nextTodoId++,
-  text
-})
 
-export const setVisibilityFilter: (filter: string) => ISetVisibilityFilterAction = (filter: string) => ({
-  type: 'SET_VISIBILITY_FILTER',
-  filter
-})
-
-export const toggleTodo = (id: number) => ({
-  type: 'TOGGLE_TODO',
-  id
-})
-
-export const VisibilityFilters = {
-  SHOW_ALL: 'SHOW_ALL',
-  SHOW_COMPLETED: 'SHOW_COMPLETED',
-  SHOW_ACTIVE: 'SHOW_ACTIVE'
+export interface IBaseAction<T> extends Action<string> {
+	type: string;
+	payload: T;
 }
+
+export interface IAddTodoAction extends IBaseAction<{ id: number, text: string }> { }
+export interface ISetVisibilityFilterAction extends IBaseAction<{ filter: string }> { }
+export interface IToggleTodoAction extends IBaseAction<{ id: number }> { }
+export interface ITodosRequestedAction extends IBaseAction<{}> { }
+export interface ITodosReceivedAction extends IBaseAction<{ todos: ITodo[] }> { }
+
+export const addTodo: (text: string) => IAddTodoAction = text => ({
+  type: ADD_TODO,
+  payload: {
+    id: nextTodoId++,
+    text
+  }
+})
+
+export const setVisibilityFilter: (filter: string) => ISetVisibilityFilterAction = filter => ({
+  type: SET_VISIBILITY_FILTER,
+  payload: {
+    filter
+  }
+})
+
+export const toggleTodo: (id: number) => IToggleTodoAction = id => ({
+  type: TOGGLE_TODO,
+  payload: {
+    id
+  }
+})
+
+export const todosRequested: () => ITodosRequestedAction = () => ({
+  type: TODOS_REQUESTED,
+  payload: {}
+});
+
+
+export const todosReceived: (todos: ITodo[]) => ITodosReceivedAction = todos => ({
+	type: TODOS_RECEIVED,
+	payload: { todos }
+});

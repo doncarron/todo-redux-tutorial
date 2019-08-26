@@ -2,7 +2,7 @@ import { IState } from "../interfaces/IState"
 import { getVisibilityFilter } from './getVisibilityFilter'
 import { createSelector } from 'reselect'
 import { ITodo } from "../interfaces/ITodo";
-import { VisibilityFilters } from "../actions";
+import { VisibilityFilters } from "../constants";
 
 export const getTodos = (state: IState) => state.todos
 
